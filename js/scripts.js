@@ -22,48 +22,97 @@
 // inside the big loop are smaller loops that end when a person selects to hold or gets a 1
 
 //Business Logic
+console.log("hello");
 function Player (playerName) {
   this.turnScore= 0;
-  this.totalScore=0;
+  this.totalScore= 0;
   this.playerName= playerName;
 }
 
-// function to add a name to the player?Would have to link to UI?
-Player.prototype.AddName = function (){} 
-
-// function to add the scores of each turn and round to player object?
-Player.prototype.addTurnScore = function (){
-  this.turnScore += diceRoll(); 
-} 
-
-
-// function to update the total score of each player
-Player.prototype.addTotalScore = function () {} 
-
-function startGame() {}
-
-
-let player1 = new Player ("Teresa"); 
-player1.addTurnScore();
-console.log (player1);
-let player2 = new Player ("Christine");
-player2.addTurnScore();
-console.log(player2);
-//Object -- die 
-
-
-//Random Number Function -- this needs to be connected to a button and roll on 'click'
 function diceRoll(){
   return Math.floor(Math.random()* 6 + 1);
 };
-console.log(dieRoll());
 
-//Should we have a seperate object to hold only scores??
-function Game () {  
-  scores=[];
+console.log(diceRoll());
+
+function Game (player1, player2) {  
+  currentPlayer= player1;
+  diceRoll();
+};
+
+
+// function to add a name to the player?Would have to link to UI?
+Player.prototype.AddName = function (){};
+console.log("hello");
+// function to add the scores of each turn and round to player object?
+
+Player.prototype.addTurnScore = function (){
+  if (this.playerName === "player1"){
+    this.turnScore += diceRoll();
+    console.log(this.turnScore);
+  }
 }
+
+//Switch Prototype
+
+//Prototype -- rolls dice -- when 1 -- stops turn and gives the user a 0, when it's greater than
+//1 it allows the user to roll again or hold --- at then end it adds up all of their dice rolls from that round
+
+
+Player.prototype.AddDiceRolls = function () {
+  let roll = diceRoll();
+  if (roll >= 2) {
+    return this.turnScore +=roll;
+    //rollAgain();// connected to a button that shows up on the UI
+  } else if (roll = 1){
+    return this.turnScore=0;
+    alert("try next time");
+   // switchPlayer();
+  }
+  // this //push rolls into array of roll --> push into turn score --> push into total score
+}
+
+// function to update the total score of each player
+Player.prototype.addTotalScore = function () {
+  this.totalScore += this.turnScore;
+}
+
+console.log("check");
+let player1 = new Player ("Teresa"); 
+
+player1.addTurnScore();
+player1.AddDiceRolls();
+player1.addTotalScore();
+console.log(player1);
+
+
+
+console.log("check");
+let player2 = new Player ("Christine");
+player2.AddDiceRolls();
+console.log(player2);
+let game1 = new Game (player1, player2); 
+console.log(game1);
+//Hold prototype
+
+Player.prototype.Hold = function () {
+  this.totalScore += this.turnScore;
+  return this.totalScore;
+}
+
+
+// function startGame() {};
+
+
+
+//Object -- die 
+
+//Random Number Function -- this needs to be connected to a button and roll on 'click'
+
+
+
+
 
 
 
 //User Interface Logic
-
