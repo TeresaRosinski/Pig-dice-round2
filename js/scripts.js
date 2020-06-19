@@ -22,35 +22,37 @@
 // inside the big loop are smaller loops that end when a person selects to hold or gets a 1
 
 //Business Logic
-console.log("hello");
+console.log("hi");
 function Player (playerName) {
   this.turnScore= 0;
   this.totalScore= 0;
   this.playerName= playerName;
 }
 
+//Random Number Function -- this needs to be connected to a button and roll on 'click'
 function diceRoll(){
   return Math.floor(Math.random()* 6 + 1);
 };
 
-console.log(diceRoll());
+function DoTurn(player){
+  player.AddDiceRolls();
+  player.addTotalScore();
+}
 
-function Game (player1, player2) {  
-  currentPlayer= player1;
-  diceRoll();
-};
+console.log("hello");
+function Game (player1, player2) {
+  while(player1.totalScore<100 || player2.totalScore<100)  {
+    DoTurn(player1);
+    DoTurn(player2);
+  }
+}
 
-
-// function to add a name to the player?Would have to link to UI?
 Player.prototype.AddName = function (){};
 console.log("hello");
-// function to add the scores of each turn and round to player object?
 
 Player.prototype.addTurnScore = function (){
-  if (this.playerName === "player1"){
-    this.turnScore += diceRoll();
-    console.log(this.turnScore);
-  }
+  if (this.playerName === "player1") { 
+    this.turnScore = diceRoll();
 }
 
 //Switch Prototype
@@ -60,59 +62,53 @@ Player.prototype.addTurnScore = function (){
 
 
 Player.prototype.AddDiceRolls = function () {
-  let roll = diceRoll();
-  if (roll >= 2) {
-    return this.turnScore +=roll;
-    //rollAgain();// connected to a button that shows up on the UI
-  } else if (roll = 1){
-    return this.turnScore=0;
-    alert("try next time");
-   // switchPlayer();
+  let rollAgain = true; 
+  while(rollAgain) {
+    let roll = diceRoll();
+    if (roll >= 2) {
+      this.turnScore +=roll;
+      rollAgain = prompt("Would you like to roll again?");
+    } else if (roll === 1){
+      return this.turnScore=0;
+      alert("try next time");
+    }
+    return this.turnScore; 
   }
-  // this //push rolls into array of roll --> push into turn score --> push into total score
 }
 
 // function to update the total score of each player
 Player.prototype.addTotalScore = function () {
   this.totalScore += this.turnScore;
+  return this.totalScore;
 }
 
-console.log("check");
-let player1 = new Player ("Teresa"); 
-
-player1.addTurnScore();
-player1.AddDiceRolls();
-player1.addTotalScore();
-console.log(player1);
-
-
-
-console.log("check");
-let player2 = new Player ("Christine");
-player2.AddDiceRolls();
-console.log(player2);
-let game1 = new Game (player1, player2); 
-console.log(game1);
 //Hold prototype
-
 Player.prototype.Hold = function () {
   this.totalScore += this.turnScore;
   return this.totalScore;
 }
 
-
 // function startGame() {};
 
 
-
-//Object -- die 
-
-//Random Number Function -- this needs to be connected to a button and roll on 'click'
-
-
-
-
-
-
-
 //User Interface Logic
+
+let player1 = new Player ("Teresa"); 
+player1.addTurnScore();
+player1.addTotalScore();
+player1.AddDiceRolls();
+
+console.log(player1);
+let player2 = new Player ("Christine");
+player2.addTurnScore();
+player2.addTotalScore();
+player2.AddDiceRolls();
+console.log(player2);
+let game1 = new Game (player1, player2); 
+
+// $(document).ready(function(){
+  
+//   $("#roll").click(function(){
+//   $("#player1-score").text(" " + game1.player1 + " ");
+//   $("#player2-score").text(" " + game1.player2 + " ");
+//   });
